@@ -28,10 +28,11 @@ var BGcall = function () {
   });
 
   if (!has_callback) {
-    callback = null;
+    chrome.runtime.sendMessage({ command: 'call', fn: fn, args: args });
   }
-
-  browser.runtime.sendMessage({ command: 'call', fn: fn, args: args }, callback);
+  else {
+    chrome.runtime.sendMessage({ command: 'call', fn: fn, args: args }, callback);
+  }
 };
 
 // Enabled in adblock_start_common.js and background.js if the user wants

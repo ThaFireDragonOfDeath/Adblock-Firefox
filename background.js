@@ -1140,22 +1140,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 // BGcall DISPATCH
-(function () {
-  browser.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-      if (request.command != 'call')
-        return; // not for us
-      var fn = window[request.fn];
-      if (typeof fn !== 'function') {
-        log('fn', fn, 'not found on background page, request: ', request);
-        return;
-      }
-      request.args.push(sender);
-      var result = fn.apply(window, request.args, sender);
-      sendResponse(result);
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.command != 'call')
+    return; // not for us
+  var fn = window[request.fn];
+  if (typeof fn !== 'function') {
+    log('fn', fn, 'not found on background page, request: ', request);
+    return;
     }
-  );
-})();
+  request.args.push(sender);
+  var result = fn.apply(window, request.args, sender);
+  sendResponse(result);
+});
 
 // These functions are usually only called by content scripts.
 
